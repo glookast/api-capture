@@ -11,11 +11,18 @@ import java.util.UUID;
 public class CaptureServiceTest
 {
     private static CaptureService captureService;
+    private static boolean isOnline;
 
     @BeforeClass
     public static void setup()
     {
         captureService = new CaptureService("localhost", 4000);
+        try {
+            captureService.getPictureFormats();
+            isOnline = true;
+        } catch (IOException | ApiException e) {
+            isOnline = false;
+        }
     }
 
     @AfterClass
@@ -26,7 +33,7 @@ public class CaptureServiceTest
     @Before
     public void beforeMethod()
     {
-//        captureService.getPictureFormats();
+        org.junit.Assume.assumeTrue(isOnline);
     }
 
     @After

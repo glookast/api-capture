@@ -15,11 +15,11 @@ import java.time.OffsetDateTime;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, defaultImpl = ApiError.class)
 public class ApiError
 {
-    private OffsetDateTime timestamp;
-    private int status;
-    private String error;
-    private String message;
-    private String path;
+    protected OffsetDateTime timestamp;
+    protected int status;
+    protected String error;
+    protected String message;
+    protected String path;
 
     public ApiError(ApiError apiError)
     {
