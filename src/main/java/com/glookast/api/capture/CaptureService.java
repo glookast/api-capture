@@ -19,6 +19,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.HttpClientConnectionManager;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -642,7 +643,7 @@ public class CaptureService
         if (requestBody != null) {
             String requestBodyJson = this.objectMapper.writerWithDefaultPrettyPrinter()
                                                       .writeValueAsString(requestBody);
-            requestEntity = new StringEntity(requestBodyJson);
+            requestEntity = new StringEntity(requestBodyJson, ContentType.APPLICATION_JSON);
         }
 
         CloseableHttpResponse response;
@@ -656,21 +657,21 @@ public class CaptureService
             case POST:
                 HttpPost httpPost = new HttpPost(url.toString());
                 httpPost.setHeader("Accept", "application/json");
-                httpPost.setHeader("Content-type", "application/json");
+                httpPost.setHeader(HTTP.CONTENT_TYPE, "application/json");
                 httpPost.setEntity(requestEntity);
                 response = client.execute(httpPost);
                 break;
             case PUT:
                 HttpPut httpPut = new HttpPut(url.toString());
                 httpPut.setHeader("Accept", "application/json");
-                httpPut.setHeader("Content-type", "application/json");
+                httpPut.setHeader(HTTP.CONTENT_TYPE, "application/json");
                 httpPut.setEntity(requestEntity);
                 response = client.execute(httpPut);
                 break;
             case PATCH:
                 HttpPatch httpPatch = new HttpPatch(url.toString());
                 httpPatch.setHeader("Accept", "application/json");
-                httpPatch.setHeader("Content-type", "application/merge-patch+json");
+                httpPatch.setHeader(HTTP.CONTENT_TYPE, "application/merge-patch+json");
                 httpPatch.setEntity(requestEntity);
                 response = client.execute(httpPatch);
                 break;
