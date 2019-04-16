@@ -1,11 +1,15 @@
 package com.glookast.api.capture;
 
+import com.glookast.commons.capture.ComPort;
+import com.glookast.commons.capture.NamingRule;
 import com.glookast.commons.capture.PictureFormat;
 import com.glookast.commons.templates.*;
 import org.junit.*;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class CaptureServiceTest
@@ -59,6 +63,10 @@ public class CaptureServiceTest
         Assert.assertNotNull(captureService.getObjectMapper());
     }
 
+    @Test
+    public void close()
+    {
+    }
 
     @Test
     public void getPictureFormats()
@@ -608,5 +616,188 @@ public class CaptureServiceTest
     @Test
     public void deleteNotificationEndpoint()
     {
+    }
+
+    @Test
+    public void getVTRStatus()
+    {
+    }
+
+    @Test
+    public void getVTRConfiguration()
+    {
+    }
+
+    @Test
+    public void setVTRConfiguration()
+    {
+    }
+
+    @Test
+    public void vtrPlay()
+    {
+    }
+
+    @Test
+    public void vtrPause()
+    {
+    }
+
+    @Test
+    public void vtrStop()
+    {
+    }
+
+    @Test
+    public void vtrFastForward()
+    {
+    }
+
+    @Test
+    public void vtrRewind()
+    {
+    }
+
+    @Test
+    public void vtrEject()
+    {
+    }
+
+    @Test
+    public void vtrShuttle()
+    {
+    }
+
+    @Test
+    public void vtrVar()
+    {
+    }
+
+    @Test
+    public void vtrJog()
+    {
+    }
+
+    @Test
+    public void vtrSeek()
+    {
+    }
+
+    @Test
+    public void vtrStep()
+    {
+    }
+
+    @Test
+    public void getComPorts()
+    {
+        List<ComPort> comPorts = null;
+
+        try {
+            comPorts = captureService.getComPorts();
+        } catch (IOException | ApiException ignored) {
+            Assert.fail();
+        }
+
+        Assert.assertNotNull(comPorts);
+    }
+
+    @Test
+    public void getNamingRules()
+    {
+        List<NamingRule> namingRules = null;
+
+        try {
+            namingRules = captureService.getNamingRules();
+        } catch (IOException | ApiException ignored) {
+            Assert.fail();
+        }
+
+        Assert.assertNotNull(namingRules);
+    }
+
+    @Test
+    public void getNamingRule()
+    {
+        NamingRule namingRule = null;
+
+        try {
+            namingRule = captureService.getNamingRule(1);
+        } catch (IOException | ApiException ignored) {
+            Assert.fail();
+        }
+
+        Assert.assertNotNull(namingRule);
+    }
+
+    @Test
+    public void setNamingRule()
+    {
+        NamingRule namingRule = new NamingRule(null, "Name", "Rule");
+
+        try {
+            namingRule = captureService.setNamingRule(namingRule);
+        } catch (IOException | ApiException ignored) {
+            Assert.fail();
+        }
+
+        namingRule.setRule("Rule2");
+
+        try {
+            namingRule = captureService.setNamingRule(namingRule);
+        } catch (IOException | ApiException ignored) {
+            Assert.fail();
+        }
+
+        Assert.assertNotNull(namingRule);
+    }
+
+    @Test
+    public void deleteNamingRule()
+    {
+        NamingRule namingRule = new NamingRule(null, "Name", "RuleToDelete");
+
+        try {
+            namingRule = captureService.setNamingRule(namingRule);
+        } catch (IOException | ApiException ignored) {
+            Assert.fail();
+        }
+
+        try {
+            captureService.deleteNamingRule(namingRule.getId());
+        } catch (IOException | ApiException ignored) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void getNamingRulesSequences()
+    {
+        Map<String, Integer> namingRuleSequences = null;
+
+        try {
+            namingRuleSequences = captureService.getNamingRulesSequences();
+        } catch (IOException | ApiException ignored) {
+            Assert.fail();
+        }
+
+        Assert.assertNotNull(namingRuleSequences);
+    }
+
+    @Test
+    public void setNamingRulesSequences()
+    {
+        Map<String, Integer> namingRuleSequences = new LinkedHashMap<>();
+
+        namingRuleSequences.put("sequence_a", 1);
+        namingRuleSequences.put("sequence_b", 1);
+
+        try {
+            namingRuleSequences = captureService.setNamingRulesSequences(namingRuleSequences);
+        } catch (IOException | ApiException ignored) {
+            Assert.fail();
+        }
+
+        Assert.assertNotNull(namingRuleSequences);
     }
 }

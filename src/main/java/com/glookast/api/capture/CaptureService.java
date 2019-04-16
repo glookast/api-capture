@@ -308,7 +308,7 @@ public class CaptureService
 
     public void setChannelConfiguration(int channelId, ChannelConfiguration channelConfiguration) throws IOException, ApiException
     {
-        patch("channels/" + channelId + "/config", channelConfiguration);
+        patch("channels/" + channelId + "/config", channelConfiguration, null);
     }
 
     public void restartChannel(int channelId) throws IOException, ApiException
@@ -333,7 +333,7 @@ public class CaptureService
 
     public void setPlayoutConfiguration(int channelId, PlayoutConfiguration playoutConfiguration) throws IOException, ApiException
     {
-        patch("channels/" + channelId + "/playout/config", playoutConfiguration);
+        patch("channels/" + channelId + "/playout/config", playoutConfiguration, null);
     }
 
     public void playoutLoad(int channelId, UUID captureJobId) throws IOException, ApiException
@@ -369,6 +369,81 @@ public class CaptureService
     public void playoutStep(int channelId, long distance) throws IOException, ApiException
     {
         post("channels/" + channelId + "/playout/step", distance, null);
+    }
+
+    public VTRStatus getVTRStatus(int channelId) throws IOException, ApiException
+    {
+        return get("channels/" + channelId + "/vtr", VTRStatus.class);
+    }
+
+    public VTRConfiguration getVTRConfiguration(int channelId) throws IOException, ApiException
+    {
+        return get("channels/" + channelId + "/vtr/config", VTRConfiguration.class);
+    }
+
+    public void setVTRConfiguration(int channelId, VTRConfiguration vtrConfiguration) throws IOException, ApiException
+    {
+        patch("channels/" + channelId + "/vtr/config", vtrConfiguration, null);
+    }
+
+    public void vtrPlay(int channelId) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/play", null, null);
+    }
+
+    public void vtrPause(int channelId) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/pause", null, null);
+    }
+
+    public void vtrStop(int channelId) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/stop", null, null);
+    }
+
+    public void vtrFastForward(int channelId) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/fast-forward", null, null);
+    }
+
+    public void vtrRewind(int channelId) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/rewind", null, null);
+    }
+
+    public void vtrEject(int channelId) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/eject", null, null);
+    }
+
+    public void vtrShuttle(int channelId, int speed) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/shuttle", speed, null);
+    }
+
+    public void vtrVar(int channelId, int speed) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/var", speed, null);
+    }
+
+    public void vtrJog(int channelId, int speed) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/jog", speed, null);
+    }
+
+    public void vtrSeek(int channelId, Timecode timecode) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/seek", timecode, null);
+    }
+
+    public void vtrStep(int channelId, int distance) throws IOException, ApiException
+    {
+        post("channels/" + channelId + "/vtr/step", distance, null);
+    }
+
+    public List<ComPort> getComPorts() throws IOException, ApiException
+    {
+        return getList("com-ports", ComPort.class);
     }
 
     public List<CaptureJob> getCaptureJobs() throws IOException, ApiException
@@ -455,7 +530,7 @@ public class CaptureService
             modifications.put("duration", duration);
         }
 
-        patch("capture-jobs/" + captureJobId, modifications);
+        patch("capture-jobs/" + captureJobId, modifications, null);
     }
 
     public void deleteCaptureJob(UUID captureJobId) throws IOException, ApiException
@@ -485,7 +560,7 @@ public class CaptureService
 
     public void setCaptureJobMetadata(UUID captureJobId, DescriptiveMetadata metadata) throws IOException, ApiException
     {
-        patch("capture-jobs/" + captureJobId + "/metadata", metadata);
+        patch("capture-jobs/" + captureJobId + "/metadata", metadata, null);
     }
 
     public byte[] getCaptureJobThumbnail(UUID captureJobId) throws IOException, ApiException
@@ -571,6 +646,69 @@ public class CaptureService
         delete("notification-endpoints/" + notificationEndpointId);
     }
 
+    public List<NamingRule> getNamingRules() throws IOException, ApiException
+    {
+        return getList("naming-rules", NamingRule.class);
+    }
+
+    public NamingRule getNamingRule(int namingRuleId) throws IOException, ApiException
+    {
+        return get("naming-rules/" + namingRuleId, NamingRule.class);
+    }
+
+    public NamingRule setNamingRule(NamingRule namingRule) throws IOException, ApiException
+    {
+        if (namingRule.getId() == null) {
+            return post("naming-rules", namingRule, NamingRule.class);
+        } else {
+            return put("naming-rules/" + namingRule.getId(), namingRule, NamingRule.class);
+        }
+    }
+
+    public void deleteNamingRule(int namingRuleId) throws IOException, ApiException
+    {
+        delete("naming-rules/" + namingRuleId);
+    }
+
+    public Map<String, Integer> getNamingRulesSequences() throws IOException, ApiException
+    {
+        Map<?, ?> map = get("naming-rules/sequences", Map.class);
+
+        Map<String, Integer> result = new LinkedHashMap<>();
+
+        if (map != null) {
+            for (Map.Entry<?, ?> e : map.entrySet()) {
+                try {
+                    String key = String.valueOf(e.getKey());
+                    Integer value = Integer.valueOf(String.valueOf(e.getValue()));
+                    result.put(key, value);
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public Map<String, Integer> setNamingRulesSequences(Map<String, Integer> sequences) throws IOException, ApiException
+    {
+        Map<?, ?> map = patch("naming-rules/sequences", sequences, Map.class);
+        Map<String, Integer> result = new LinkedHashMap<>();
+
+        if (map != null) {
+            for (Map.Entry<?, ?> e : map.entrySet()) {
+                try {
+                    String key = String.valueOf(e.getKey());
+                    Integer value = Integer.valueOf(String.valueOf(e.getValue()));
+                    result.put(key, value);
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        return result;
+    }
+
     private <R> List<R> getList(String path, Class<R> responseType) throws IOException, ApiException
     {
         return method(HttpMethod.GET, path, null, null, responseType);
@@ -611,9 +749,13 @@ public class CaptureService
         return list.get(0);
     }
 
-    private <T> void patch(String path, T requestBody) throws IOException, ApiException
+    private <T, R> R patch(String path, T requestBody, Class<R> responseType) throws IOException, ApiException
     {
-        method(HttpMethod.PATCH, path, null, requestBody, null);
+        List<R> list = method(HttpMethod.PATCH, path, null, requestBody, responseType);
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     private void delete(String path) throws IOException, ApiException
