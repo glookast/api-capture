@@ -19,6 +19,7 @@ public class ApiError
     protected int status;
     protected String error;
     protected String message;
+    protected String detail;
     protected String path;
 
     public ApiError(ApiError apiError)
@@ -27,6 +28,7 @@ public class ApiError
         this.status = apiError.status;
         this.error = apiError.error;
         this.message = apiError.message;
+        this.detail = apiError.detail;
         this.path = apiError.path;
     }
 }
