@@ -1,5 +1,7 @@
 package com.glookast.api.capture;
 
+import com.glookast.commons.capture.ApiError;
+
 public class ApiException extends Exception
 {
     private final ApiError apiError;
