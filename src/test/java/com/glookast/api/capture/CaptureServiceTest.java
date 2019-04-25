@@ -3,6 +3,7 @@ package com.glookast.api.capture;
 import com.glookast.commons.capture.ComPort;
 import com.glookast.commons.capture.NamingRule;
 import com.glookast.commons.capture.PictureFormat;
+import com.glookast.commons.capture.SystemTestResult;
 import com.glookast.commons.templates.*;
 import org.junit.*;
 
