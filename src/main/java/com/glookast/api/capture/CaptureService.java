@@ -60,11 +60,7 @@ public class CaptureService
 
         this.restEndpoint = "http://" + hostname + ":" + port + "/api/v1/";
 
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.registerModule(new Jdk8Module());
-        this.objectMapper.registerModule(new JavaTimeModule());
-        this.objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
-        this.objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        this.objectMapper = ApiResponseObjectMapper.getMapper();
 
         connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setDefaultMaxPerRoute(maxConnections);
@@ -884,11 +880,12 @@ public class CaptureService
             }
 
             if (apiError == null) {
-                apiError = new ApiError();
-                apiError.setTimestamp(OffsetDateTime.now());
-                apiError.setStatus(status);
-                apiError.setError(response.getStatusLine().getReasonPhrase());
-                apiError.setPath(restEndpoint + path);
+                apiError = ApiError.builder()
+                        .status(status)
+                        .error(response.getStatusLine().getReasonPhrase())
+                        .path(restEndpoint + path)
+                        .method(method.toString())
+                        .build();
             }
 
             throw new ApiException(apiError);
