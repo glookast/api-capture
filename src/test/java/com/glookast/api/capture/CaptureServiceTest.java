@@ -165,8 +165,7 @@ public class CaptureServiceTest
     }
 
     @Test
-    public void setStorageSystem()
-    {
+    public void setStorageSystem() {
         try {
             GenericStorageSystem genericStorageSystem = new GenericStorageSystem();
             genericStorageSystem.setName("Generic Storage");
@@ -188,10 +187,23 @@ public class CaptureServiceTest
             avidOtherStorageSystem.setName("Generic Avid Storage System");
             avidOtherStorageSystem.setLocation("\\\\localhost\\D$\\Avid MediaFiles\\MXF\\1");
 
+            EditShareFlowStorageSystem editShareFlowStorageSystem = new EditShareFlowStorageSystem();
+            editShareFlowStorageSystem.setId(UUID.randomUUID());
+            editShareFlowStorageSystem.setName("EditShare FLOW Storage System");
+            editShareFlowStorageSystem.setHostname("hostname");
+            editShareFlowStorageSystem.setPort(2000);
+            editShareFlowStorageSystem.setSsl(true);
+            editShareFlowStorageSystem.setUsername("username");
+            editShareFlowStorageSystem.setPassword("password");
+            editShareFlowStorageSystem.setStorageURL("storageURL");
+            editShareFlowStorageSystem.setMediaSpace("mediaSpace");
+            editShareFlowStorageSystem.setFlowProxy(true);
+
             genericStorageSystem = (GenericStorageSystem) captureService.setStorageSystem(genericStorageSystem);
             avidNexisStorageSystem = (AvidNexisStorageSystem) captureService.setStorageSystem(avidNexisStorageSystem);
             avidMediaNetworkStorageSystem = (AvidMediaNetworkStorageSystem) captureService.setStorageSystem(avidMediaNetworkStorageSystem);
             avidOtherStorageSystem = (AvidOtherStorageSystem) captureService.setStorageSystem(avidOtherStorageSystem);
+            editShareFlowStorageSystem = (EditShareFlowStorageSystem) captureService.setStorageSystem(editShareFlowStorageSystem);
 
             StorageSystem storageSystem = captureService.getStorageSystem(genericStorageSystem.getId());
             Assert.assertEquals(storageSystem, genericStorageSystem);
@@ -205,10 +217,15 @@ public class CaptureServiceTest
             storageSystem = captureService.getStorageSystem(avidOtherStorageSystem.getId());
             Assert.assertEquals(storageSystem, avidOtherStorageSystem);
 
+            storageSystem = captureService.getStorageSystem(editShareFlowStorageSystem.getId());
+            Assert.assertEquals(storageSystem, editShareFlowStorageSystem);
+
             captureService.deleteStorageSystem(genericStorageSystem.getId());
             captureService.deleteStorageSystem(avidNexisStorageSystem.getId());
             captureService.deleteStorageSystem(avidMediaNetworkStorageSystem.getId());
             captureService.deleteStorageSystem(avidOtherStorageSystem.getId());
+            captureService.deleteStorageSystem(editShareFlowStorageSystem.getId());
+
         } catch (IOException | ApiException ignored) {
             Assert.fail();
         }
