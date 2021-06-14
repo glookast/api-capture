@@ -63,6 +63,26 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
+task tagRelease(type: Exec) {
+    commandLine "git"
+    args "tag", "-a", "$version", "-m", "Created release $version"
+}
+
+task tagReleaseRemote(type: Exec) {
+    commandLine "git"
+    args "push", "origin", "$version"
+}
+
+task untagRelease(type: Exec) {
+    commandLine "git"
+    args "tag", "-d", "$version"
+}
+
+task untagReleaseRemote(type: Exec) {
+    commandLine "git"
+    args "push", "-d", "origin", "$version"
+}
+
 signing {
     sign configurations.archives
 }
